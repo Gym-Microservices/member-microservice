@@ -31,10 +31,6 @@ public class MemberService {
         return memberRepository.findAll();
     }
     
-    public List<Member> getActiveMembers() {
-        return memberRepository.findByIsActiveTrue();
-    }
-    
     public Optional<Member> getMemberById(Long id) {
         return memberRepository.findById(id);
     }
@@ -51,13 +47,6 @@ public class MemberService {
         member.setEmail(memberDetails.getEmail());
         
         return memberRepository.save(member);
-    }
-    
-    public void deactivateMember(Long id) {
-        Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
-        
-        memberRepository.save(member);
     }
     
     public void deleteMember(Long id) {

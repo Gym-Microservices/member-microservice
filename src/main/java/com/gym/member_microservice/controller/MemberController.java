@@ -33,12 +33,6 @@ public class MemberController {
         return ResponseEntity.ok(members);
     }
     
-    @GetMapping("/active")
-    public ResponseEntity<List<Member>> getActiveMembers() {
-        List<Member> activeMembers = memberService.getActiveMembers();
-        return ResponseEntity.ok(activeMembers);
-    }
-    
     @GetMapping("/{id}")
     public ResponseEntity<Member> getMemberById(@PathVariable Long id) {
         Optional<Member> member = memberService.getMemberById(id);
@@ -58,16 +52,6 @@ public class MemberController {
         try {
             Member updatedMember = memberService.updateMember(id, memberDetails);
             return ResponseEntity.ok(updatedMember);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
-    @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateMember(@PathVariable Long id) {
-        try {
-            memberService.deactivateMember(id);
-            return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
