@@ -15,6 +15,21 @@ public class GatewayAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+        
+        if (request.getHeader("X-Internal-Call") != null) {
+            System.out.println("Internal call detected, skipping authentication.");
+            
+            GatewayAuthenticationToken authToken = new GatewayAuthenticationToken(
+            "internal-user",
+            "internal",
+            "internal@gym.com",
+            List.of("ROLE_ADMIN")
+            );
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authSource = request.getHeader("X-Auth-Source");
         String userAgent = request.getHeader("User-Agent");
