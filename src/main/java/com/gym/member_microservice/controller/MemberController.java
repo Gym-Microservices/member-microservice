@@ -32,7 +32,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Member registered successfully"),
             @ApiResponse(responseCode = "400", description = "Error in input data")
     })
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Member> registerMember(@RequestBody Member member) {
         try {
             Member registeredMember = memberService.registerMember(member);
@@ -45,7 +45,7 @@ public class MemberController {
     @GetMapping
     @Operation(summary = "Get all members", description = "Returns a list of all registered members")
     @ApiResponse(responseCode = "200", description = "List of members retrieved successfully")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH')")
     public ResponseEntity<List<Member>> getAllMembers() {
         List<Member> members = memberService.getAllMembers();
         return ResponseEntity.ok(members);
@@ -57,7 +57,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Member found"),
             @ApiResponse(responseCode = "404", description = "Member not found")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<Member> getMemberById(@Parameter(description = "Member ID") @PathVariable Long id) {
         Optional<Member> member = memberService.getMemberById(id);
         return member.map(ResponseEntity::ok)
@@ -70,7 +70,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Member found"),
             @ApiResponse(responseCode = "404", description = "Member not found")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_COACH') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<Member> getMemberByEmail(
             @Parameter(description = "Member email") @PathVariable String email) {
         Optional<Member> member = memberService.getMemberByEmail(email);
@@ -84,7 +84,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Member updated successfully"),
             @ApiResponse(responseCode = "404", description = "Member not found")
     })
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MEMBER')")
     public ResponseEntity<Member> updateMember(@Parameter(description = "Member ID") @PathVariable Long id,
             @RequestBody Member memberDetails) {
         try {
@@ -101,7 +101,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "Member deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Member not found")
     })
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteMember(@Parameter(description = "Member ID") @PathVariable Long id) {
         memberService.deleteMember(id);
         return ResponseEntity.ok().build();
